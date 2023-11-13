@@ -3,6 +3,9 @@ package com.deval.pizza.persistence.repository;
 import com.deval.pizza.persistence.entity.OrderEntity;
 import org.springframework.data.repository.ListCrudRepository;
 
-public interface OrderRepository extends ListCrudRepository<OrderEntity, Integer> {
+import java.time.LocalDateTime;
+import java.util.List;
 
+public interface OrderRepository extends ListCrudRepository<OrderEntity, Integer> {
+    List<OrderEntity> findAllByDateAfter(LocalDateTime date);
 }
