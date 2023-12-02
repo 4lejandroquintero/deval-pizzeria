@@ -1,5 +1,6 @@
 package com.deval.pizza.web.controller;
 
+import com.deval.pizza.persistence.entity.OrderEntity;
 import com.deval.pizza.persistence.entity.PizzaEntity;
 import com.deval.pizza.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class PizzaController {
     @GetMapping("/with/{ingredient}")
     public ResponseEntity<List<PizzaEntity>> getWith(@PathVariable String ingredient) {
         return ResponseEntity.ok(this.pizzaService.getWith(ingredient));
+    }
+
+    @GetMapping("/cheapest/{price}")
+    public ResponseEntity<List<PizzaEntity>> getCheapestPizzas(@PathVariable double price) {
+        return ResponseEntity.ok(this.pizzaService.getCheapest(price));
     }
 
     @GetMapping("/without/{ingredient}")
