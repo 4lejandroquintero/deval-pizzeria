@@ -1,6 +1,7 @@
 package com.deval.pizza.service;
 
 import com.deval.pizza.persistence.entity.OrderEntity;
+import com.deval.pizza.persistence.projection.OrderSummary;
 import com.deval.pizza.persistence.repository.OrderRepository;
 import jakarta.persistence.criteria.Order;
 import org.aspectj.weaver.ast.Or;
@@ -43,5 +44,9 @@ public class OrderService {
 
     public List<OrderEntity> getCustomerOrders(String idCustomer) {
         return this.orderRepository.findCustomerOrders(idCustomer);
+    }
+
+    public OrderSummary getSummary(int orderId) {
+        return this.orderRepository.findSummary(orderId);
     }
 }
