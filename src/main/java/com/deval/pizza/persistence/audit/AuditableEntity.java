@@ -1,4 +1,4 @@
-package com.deval.pizza.persistence.entity;
+package com.deval.pizza.persistence.audit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
