@@ -43,5 +43,6 @@ public class OrderEntity {
     private CustomerEntity customer;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER) //manytone y onetone
+    @OrderBy("price ASC")
     private List<OrderItemEntity> items;
 }

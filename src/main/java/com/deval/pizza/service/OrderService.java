@@ -2,6 +2,7 @@ package com.deval.pizza.service;
 
 import com.deval.pizza.persistence.entity.OrderEntity;
 import com.deval.pizza.persistence.repository.OrderRepository;
+import jakarta.persistence.criteria.Order;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,9 @@ public class OrderService {
     public List<OrderEntity> getOutsideOrders() {
         List<String> methods = Arrays.asList(DELIVERY, CARRYOUT);
         return this.orderRepository.findAllByMethodIn(methods);
+    }
+
+    public List<OrderEntity> getCustomerOrders(String idCustomer) {
+        return this.orderRepository.findCustomerOrders(idCustomer);
     }
 }
