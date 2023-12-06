@@ -8,6 +8,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 public class SecurityConfig {
 
@@ -16,9 +24,11 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .cors().and()
-                .authorizeRequests()
-                .requestMatchers(HttpMethod.GET, "/api/pizzas/**").permitAll()
-                .requestMatchers(HttpMethod.PUT).denyAll()
+                .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.GET, "/api/pizzas/**").hasAnyRole("ADMIN", "CUSTOMER")
+                .requestMatchers(HttpMethod.POST, "/api/pizzas/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
+                .requestMatchers("/api/orders/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -31,5 +41,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

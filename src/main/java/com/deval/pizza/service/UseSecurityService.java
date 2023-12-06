@@ -1,6 +1,7 @@
 package com.deval.pizza.service;
 
 import com.deval.pizza.persistence.entity.UserEntity;
+import com.deval.pizza.persistence.entity.UserRoleEntity;
 import com.deval.pizza.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -23,10 +24,12 @@ public class UseSecurityService implements UserDetailsService {
         UserEntity userEntity = this.userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
 
+        String[] roles = userEntity.getRoles().stream().map(UserRoleEntity::getRole).toArray(String[]::new);
+
         return User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .roles("ADMIN")
+                .roles(roles)
                 .accountLocked(userEntity.getLocked())
                 .disabled(userEntity.getDisabled())
                 .build();
