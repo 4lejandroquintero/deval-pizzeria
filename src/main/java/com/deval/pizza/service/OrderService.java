@@ -7,6 +7,7 @@ import com.deval.pizza.service.dto.RandomOrderDto;
 import jakarta.persistence.criteria.Order;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,7 @@ public class OrderService {
         List<String> methods = Arrays.asList(DELIVERY, CARRYOUT);
         return this.orderRepository.findAllByMethodIn(methods);
     }
-
+    @Secured("ROLE_ADMIN")
     public List<OrderEntity> getCustomerOrders(String idCustomer) {
         return this.orderRepository.findCustomerOrders(idCustomer);
     }
