@@ -3,7 +3,6 @@ package com.deval.pizza.service;
 import com.deval.pizza.persistence.entity.UserEntity;
 import com.deval.pizza.persistence.entity.UserRoleEntity;
 import com.deval.pizza.persistence.repository.UserRepository;
-import jdk.dynalink.linker.support.SimpleLinkRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,18 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UseSecurityService implements UserDetailsService {
+public class UserSecurityService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UseSecurityService(UserRepository userRepository) {
+    public UserSecurityService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = this.userRepository.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found."));
 
         System.out.println(userEntity);
 
@@ -37,16 +36,17 @@ public class UseSecurityService implements UserDetailsService {
         return User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .roles()
+                .authorities(this.grantedAuthorities(roles))
                 .accountLocked(userEntity.getLocked())
                 .disabled(userEntity.getDisabled())
                 .build();
     }
 
     private String[] getAuthorities(String role) {
-        if("ADMIN".equals(role) || "CUSTOMER".equals(role)) {
+        if ("ADMIN".equals(role) || "CUSTOMER".equals(role)) {
             return new String[] {"random_order"};
         }
+
         return new String[] {};
     }
 
@@ -54,11 +54,10 @@ public class UseSecurityService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>(roles.length);
 
         for (String role: roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE " + role));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
             for (String authority: this.getAuthorities(role)) {
                 authorities.add(new SimpleGrantedAuthority(authority));
-
             }
         }
 
